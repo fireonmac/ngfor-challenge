@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 interface DragulaModelTag {
   id: number;
@@ -15,6 +16,7 @@ export class AppComponent {
 
   trackByTag = (index: number, tag: DragulaModelTag) => tag.id;
 
+  newTag = '';
   tags: string[] = [];
   dragulaModelTags: DragulaModelTag[] = [];
 
@@ -27,16 +29,17 @@ export class AppComponent {
     });
   }
 
-  onAddBtnClick() {
-    this.tags.push('');
+  onAddBtnClick(model: NgModel) {
+    this.tags.push(this.newTag);
     this.dragulaModelTags.push({
       id: this.tags.length * Math.random(),
-      tagTitle: '',
+      tagTitle: this.newTag,
     });
+    this.newTag = '';
+    model.reset();
   }
 
   onDelBtnClick(idx: number) {
-    console.log(123);
     this.tags.splice(idx, 1);
     this.dragulaModelTags.splice(idx, 1);
   }

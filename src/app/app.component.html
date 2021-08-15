@@ -1,67 +1,71 @@
-<div class="container pt-5">
+<h1 class="text-center mb-4 display-4 mt-5">*ngFor Assignment Review</h1>
 
-  <div id="cockpit">
-
-    <button
-      class="btn btn-primary"
-      (click)="onAddBtnClick()"
+<div id="cockpit" class="container mb-4">
+  <div class="row d-flex flex-nowrap">
+    <input
+      type="text"
+      class="form-control py-4"
+      placeholder="Enter a new tag"
+      [(ngModel)]="newTag"
+      required
+      #newTagModel="ngModel"
     >
-      Add Button
+    <button class="btn btn-primary flex-shrink-0 px-4"
+      [disabled]="newTagModel.invalid"
+      (click)="onAddBtnClick(newTagModel)"
+      (keyup.enter)="onAddBtnClick(newTagModel)"
+    >
+      Add New Tag
     </button>
-
-    <div class="pt-4">
-
-      <ul
-        dragula="TAGS"
-        [(dragulaModel)]="dragulaModelTags"
-        (dragulaModelChange)="onDragulaModelChange($event)"
-      >
-
-        <li
-          class="p-4 bg-primary mb-4 d-flex"
-          *ngFor="let tag of dragulaModelTags; let i = index; trackBy: trackByTag"
-        >
-
-          <input
-            type="text" class="form-control"
-            [(ngModel)]="tags[i]"
-            (ngModelChange)="onNgModelChange($event, i)"
-          >
-
-          <button
-            class="btn btn-success"
-            (click)="onDelBtnClick(i)"
-          >
-            X
-          </button>
-
-        </li>
-
-      </ul>
-
-    </div>
-
   </div>
 
-  <div id="tower">
-
-    <h3>Model</h3>
-
-    <pre>
-
-      {{ tags | json }}
-
-    </pre>
-
-    <h3>Dragula Model</h3>
-
-    <pre>
-
-      {{ dragulaModelTags | json }}
-
-    </pre>
-
+  <div *ngIf="newTagModel.invalid && (newTagModel.dirty || newTagModel.touched)">
+    <p
+      *ngIf="newTagModel.errors && newTagModel.errors.required"
+      class="text-danger mt-1"
+    >
+      New tag is required
+    </p>
   </div>
-
 </div>
 
+
+<div
+  class="container bg-light rounded"
+  [ngClass]="{ 'pt-4': tags.length > 0, 'pb-4': tags.length > 0 }"
+>
+  <div class="">
+    <ul class="mb-0" dragula="TAGS" [(dragulaModel)]="dragulaModelTags" (dragulaModelChange)="onDragulaModelChange($event)">
+      <li
+        class="p-4 bg-warning d-flex rounded"
+        [ngClass]="{'mb-4': !isLast }"
+        *ngFor="let tag of dragulaModelTags; let i = index; last as isLast; trackBy: trackByTag"
+      >
+        <input type="text" class="form-control" [(ngModel)]="tags[i]" (ngModelChange)="onNgModelChange($event, i)">
+        <button class="btn btn-success" (click)="onDelBtnClick(i)">
+          X
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div
+  id="tower"
+  class="container mt-4 mb-5"
+>
+  <div class="row">
+    <div class="col-6 border border-4 py-4">
+      <h3>Model</h3>
+      <pre>
+        {{ tags | json }}
+      </pre>
+    </div>
+    <div class="col-6 border border-4 py-4">
+      <h3>Dragula Model</h3>
+      <pre>
+        {{ dragulaModelTags | json }}
+      </pre>
+    </div>
+  </div>
+</div>
