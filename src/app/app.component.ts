@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 
+interface DragulaModelTag {
+  id: number;
+  tagTitle: string;
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,10 +13,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'ngfor-assignment-review';
 
-  trackByTag = (index: number, tag: any) => tag.id;
+  trackByTag = (index: number, tag: DragulaModelTag) => tag.id;
 
   tags: string[] = [];
-  dragulaModelTags: any[] = [];
+  dragulaModelTags: DragulaModelTag[] = [];
 
   constructor() {
     this.dragulaModelTags = this.tags.map((tag, index) => {
@@ -36,11 +41,11 @@ export class AppComponent {
     this.dragulaModelTags.splice(idx, 1);
   }
 
-  onNgModelChange(event: any, idx: number) {
+  onNgModelChange(event: string, idx: number) {
     this.dragulaModelTags[idx].tagTitle = event;
   }
 
-  onDragulaModelChange(event: any) {
-    this.tags = event.map((t: any) => t.tagTitle);
+  onDragulaModelChange(event: DragulaModelTag[]) {
+    this.tags = event.map(t => t.tagTitle);
   }
 }
